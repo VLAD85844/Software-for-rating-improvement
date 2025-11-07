@@ -19,7 +19,7 @@ import threading
 import psutil
 import platform
 import subprocess
-from omnilogin_manager import OmniloginManager
+from src.managers.omnilogin_manager import OmniloginManager
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 
@@ -120,8 +120,13 @@ class GoLoginAuth:
             finally:
                 db.close()
 
-            if Path('config.json').exists():
-                with open('config.json', 'r') as f:
+            # Try config/config.json first, then fallback to config.json in root
+            config_path = Path('config/config.json')
+            if not config_path.exists():
+                config_path = Path('config.json')
+            
+            if config_path.exists():
+                with open(config_path, 'r') as f:
                     config_data = json.load(f)
                     self.config.update({
                         'watch_duration': str(config_data.get('watch_duration', '30')),

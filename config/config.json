@@ -1,0 +1,12 @@
+{
+    "watch_duration": "30",
+    "max_actions_per_account": "3",
+    "human_behavior": true,
+    "enable_likes": true,
+    "enable_subscriptions": false,
+    "enable_referral": true,
+    "urls_strategy": "random",
+    "create_channel": false,
+    "enable_title_search": false,
+    "filter_strategy": "none"
+}

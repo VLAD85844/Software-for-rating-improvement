@@ -1,3 +1,5 @@
+"""Omnilogin browser profile management."""
+
 import asyncio
 import requests
 import json

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Soft</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-robot"></i> YouTube Soft</h1>
+            <div class="status" id="status-indicator">
+                <span class="status-dot"></span>
+                <span class="status-text">Проверка...</span>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <div class="panel settings-panel">
+                <h2><i class="fas fa-cog"></i> Настройки</h2>
+
+                <div class="form-group">
+                    <label>Длительность просмотра:</label>
+                    <select id="watch-duration" class="form-control">
+                        <option value="30">30 секунд</option>
+                        <option value="45">45 секунд</option>
+                        <option value="60">1 минута</option>
+                        <option value="90">1.5 минуты</option>
+                        <option value="120">2 минуты</option>
+                        <option value="180">3 минуты</option>
+                        <option value="240">4 минуты</option>
+                        <option value="300">5 минут</option>
+                    </select>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label>Макс. действий на аккаунт:</label>
+                    <input type="number" id="max-actions" class="form-control" min="1" max="10" value="3">
+                </div>
+
+                <div class="form-group">
+                    <label>Стратегия выбора видео:</label>
+                    <select id="urls-strategy" class="form-control">
+                        <option value="single">Одно видео для всех</option>
+                        <option value="random" selected>Случайное видео для каждого</option>
+                        <option value="round-robin">Поочередное распределение</option>
+                        <option value="sequential">Все видео последовательно</option>
+                    </select>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label>Количество потоков:</label>
+                    <input type="number" id="threads-count" class="form-control" min="1" max="20" value="5">
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" id="enable-referral" class="form-check-input" checked>
+                    <label class="form-check-label" for="enable-referral">Использовать реферальные переходы</label>
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" id="human-behavior" class="form-check-input" checked>
+                    <label class="form-check-label" for="human-behavior">Имитация человеческого поведения</label>
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" id="enable-likes" class="form-check-input" checked>
+                    <label class="form-check-label" for="enable-likes">Ставить лайки</label>
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" id="enable-subscriptions" class="form-check-input">
+                    <label class="form-check-label" for="enable-subscriptions">Подписываться на каналы</label>
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" id="create-channel" class="form-check-input">
+                    <label class="form-check-label" for="create-channel">Создать канал</label>
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" id="enable-title-search" class="form-check-input">
+                    <label class="form-check-label" for="enable-title-search">Поиск видео по названию</label>
+                </div>
+
+            </div>
+
+            <div class="panel upload-panel">
+                <h2><i class="fas fa-upload"></i> Загрузка данных</h2>
+
+                <div class="upload-section">
+                    <h3>Аккаунты</h3>
+                    <div class="upload-box" id="accounts-upload">
+                        <input type="file" id="accounts-file" accept=".txt" style="display: none;">
+                        <button class="btn btn-upload" onclick="document.getElementById('accounts-file').click()">
+                            <i class="fas fa-cloud-upload-alt"></i> Выбрать файл
+                        </button>
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                        <span class="file-info">Файл не выбран</span>
+                    </div>
+                </div>
+
+                <div class="upload-section">
+                    <h3>Прокси</h3>
+                    <div class="upload-box" id="proxies-upload">
+                        <input type="file" id="proxies-file" accept=".txt" style="display: none;">
+                        <button class="btn btn-upload" onclick="document.getElementById('proxies-file').click()">
+                            <i class="fas fa-cloud-upload-alt"></i> Выбрать файл
+                        </button>
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                        <span class="file-info">Файл не выбран</span>
+                    </div>
+                </div>
+
+                <div class="upload-section">
+                    <h3>Видео URL</h3>
+                    <div class="upload-box" id="urls-upload">
+                        <input type="file" id="urls-file" accept=".txt" style="display: none;">
+                        <button class="btn btn-upload" onclick="document.getElementById('urls-file').click()">
+                            <i class="fas fa-cloud-upload-alt"></i> Выбрать файл
+                        </button>
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                        <span class="file-info">Файл не выбран</span>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="panel control-panel">
+                <h2><i class="fas fa-play-circle"></i> Управление</h2>
+                <div class="control-buttons">
+                    <button id="start-btn" class="btn btn-success">
+                        <i class="fas fa-play"></i> Старт
+                    </button>
+                    <button id="stop-btn" class="btn btn-danger" disabled>
+                        <i class="fas fa-stop"></i> Стоп
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-accounts">0</div>
+                        <div class="stat-label">Аккаунтов</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="active-accounts">0</div>
+                        <div class="stat-label">Активных</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="success-actions">0</div>
+                        <div class="stat-label">Успешно</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="failed-actions">0</div>
+                        <div class="stat-label">Ошибок</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel accounts-panel">
+            <div class="panel-header">
+                <h2><i class="fas fa-users"></i> Управление аккаунтами</h2>
+                <div class="accounts-stats">
+                    <span>Всего: <strong id="total-accounts-count">0</strong></span>
+                    <span>Выбрано: <strong id="selected-accounts-count">0</strong></span>
+                    <span>Активных: <strong id="active-accounts-count">0</strong></span>
+                </div>
+            </div>
+
+            <div class="account-controls">
+                <button id="select-all" class="btn btn-secondary">
+                    <i class="fas fa-check-square"></i> Выбрать все
+                </button>
+                <button id="deselect-all" class="btn btn-secondary">
+                    <i class="fas fa-square"></i> Снять выбор
+                </button>
+                <button id="delete-selected" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i> Удалить выбранные
+                </button>
+                <button id="refresh-accounts" class="btn btn-secondary">
+                    <i class="fas fa-sync-alt"></i> Обновить
+                </button>
+                <button id="clear-profiles" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i> Очистить профили
+                </button>
+                <div class="selection-hint">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Для выделения диапазона: дважды кликните на первый аккаунт, затем кликните на последний</span>
+                </div>
+            </div>
+
+            <div class="account-list-container">
+                <div class="account-list-header">
+                    <div class="account-checkbox">
+                        <input type="checkbox" id="select-all-checkbox">
+                    </div>
+                    <div class="account-email">Email</div>
+                    <div class="account-status">Статус</div>
+                    <div class="account-proxy">Прокси</div>
+                    <div class="account-actions">Действия</div>
+                </div>
+                <div class="account-list" id="account-list">
+                    <div class="empty-state">
+                        <i class="fas fa-user-slash"></i>
+                        <p>Нет загруженных аккаунтов</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel queue-panel">
+            <div class="panel-header">
+                <h2><i class="fas fa-list"></i> Очередь видео</h2>
+                <div class="queue-stats">
+                    <span>Всего: <strong id="total-queue-count">0</strong></span>
+                    <span>В процессе: <strong id="processing-queue-count">0</strong></span>
+                    <span>Завершено: <strong id="completed-queue-count">0</strong></span>
+                </div>
+            </div>
+
+            <div class="queue-controls">
+                <button id="add-queue-item" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Добавить видео
+                </button>
+                <button id="clear-queue" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i> Очистить очередь
+                </button>
+                <button id="refresh-queue" class="btn btn-secondary">
+                    <i class="fas fa-sync-alt"></i> Обновить
+                </button>
+            </div>
+
+            <div class="queue-form" id="queue-form" style="display: none;">
+                <div class="form-group">
+                    <label>Тег для поиска:</label>
+                    <input type="text" id="queue-tag" class="form-control" placeholder="Введите тег для поиска">
+                </div>
+                <div class="form-group">
+                    <label>Название видео:</label>
+                    <input type="text" id="queue-title" class="form-control" placeholder="Введите название видео">
+                </div>
+                <div class="form-group">
+                    <label>Фильтр поиска:</label>
+                    <select id="queue-filter" class="form-control">
+                        <option value="none">Без фильтров</option>
+                        <option value="last-hour">За последний час</option>
+                        <option value="today">За сегодня</option>
+                        <option value="week">За неделю</option>
+                        <option value="month">За месяц</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Приоритет:</label>
+                    <select id="queue-priority" class="form-control">
+                        <option value="0">Обычный</option>
+                        <option value="1">Высокий</option>
+                        <option value="2">Критический</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button id="save-queue-item" class="btn btn-success">
+                        <i class="fas fa-save"></i> Сохранить
+                    </button>
+                    <button id="cancel-queue-item" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Отмена
+                    </button>
+                </div>
+            </div>
+
+            <div class="queue-list-container">
+                <div class="queue-list-header">
+                    <div class="queue-priority">Приоритет</div>
+                    <div class="queue-tag">Тег</div>
+                    <div class="queue-title">Название</div>
+                    <div class="queue-filter">Фильтр</div>
+                    <div class="queue-status">Статус</div>
+                    <div class="queue-actions">Действия</div>
+                </div>
+                <div class="queue-list" id="queue-list">
+                    <div class="empty-state">
+                        <i class="fas fa-list"></i>
+                        <p>Очередь пуста</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
